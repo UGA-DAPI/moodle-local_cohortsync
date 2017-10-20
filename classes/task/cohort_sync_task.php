@@ -15,16 +15,24 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
- *
- * @package   local_cohortsync
- * @copyright 2014 Daniel Neis Araujo
+ * @package   local_ldap
+ * @copyright 2016 Lafayette College ITS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace local_cohortsync\task;
 
-$plugin->version   = 2017102000;      // The current module version (Date: YYYYMMDDXX).
-$plugin->requires  = 2014051200;      // Requires this Moodle version.
-$plugin->component = 'local_cohortsync';// Full name of the plugin (used for diagnostics).
-$plugin->cron      = 0;
+require_once($CFG->dirroot.'/local/cohortsync/locallib.php');
+
+class cohort_sync_task extends \core\task\scheduled_task {
+    public function get_name() {
+        return get_string('gcohortsynctask', 'local_cohortsync');
+    }
+
+    public function execute() {
+        $trace = new \text_progress_trace();
+        if ($plugin = new \local_cohortsync()) {
+            $plugin->sync_cohorts($trace);
+        }
+    }
+}
