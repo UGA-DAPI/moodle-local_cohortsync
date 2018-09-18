@@ -3,5 +3,5 @@
     "php.validate.enable": false,
     "editor.wordWrap": "wordWrapColumn",
     "editor.wordWrapColumn": 132,
-    "editor.wrappingIndent": "indent"
+    "editor.wrappingIndent": "indent",
 }

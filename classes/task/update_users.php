@@ -14,15 +14,37 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+
 /**
- * Version details.
- *
- * @copyright 2014 Daniel Neis Araujo
+ * Class cohort_sync_task
+ * @package   local_cohortsync
+ * @author    Guy Thomas <gthomas@moodlerooms.com>
+ * @copyright Copyright (c) 2017 Blackboard Inc.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2017102303;      // The current module version (Date: YYYYMMDDXX).
-$plugin->requires = 2014051200;      // Requires this Moodle version.
-$plugin->component = 'local_cohortsync'; // Full name of the plugin (used for diagnostics).
-$plugin->cron = 0;
+namespace local_cohortsync\task;
+
+defined('MOODLE_INTERNAL') || die();
+require_once($CFG->dirroot.'/local/cohortsync/locallib.php');
+
+class update_users extends \core\task\scheduled_task {
+    /**
+     * Name for this task.
+     *
+     * @return string
+     */
+    public function get_name() {
+        return get_string('update_users', 'local_cohortsync');
+    }
+
+    /**
+     * Run task for synchronising users.
+     */
+    public function execute() {
+        $trace = new \text_progress_trace();
+        if ($plugin = new \local_cohortsync()) {
+            $plugin->update_users($trace);
+        }
+    }
+}

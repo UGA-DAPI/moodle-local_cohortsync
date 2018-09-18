@@ -15,24 +15,35 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package   local_ldap
- * @copyright 2016 Lafayette College ITS
+ * Task definition for enrol_ldap.
+ * @author    Guy Thomas <gthomas@moodlerooms.com>
+ * @copyright Copyright (c) 2017 Blackboard Inc.
+ * @package   local_cohortsync
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_cohortsync\task;
+defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot.'/local/cohortsync/locallib.php');
+$tasks = array(
+    array(
+        'classname' => '\local_cohortsync\task\sync_cohorts',
+        'blocking' => 0,
+        'minute' => 'R',
+        'hour' => 'R',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*',
+        'disabled' => 1
+    ),
+    array(
+        'classname' => '\local_cohortsync\task\update_users',
+        'blocking' => 0,
+        'minute' => 'R',
+        'hour' => 'R',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*',
+        'disabled' => 1
+    )
+);
 
-class cohort_sync_task extends \core\task\scheduled_task {
-    public function get_name() {
-        return get_string('gcohortsynctask', 'local_cohortsync');
-    }
-
-    public function execute() {
-        $trace = new \text_progress_trace();
-        if ($plugin = new \local_cohortsync()) {
-            $plugin->sync_cohorts($trace);
-        }
-    }
-}
